@@ -3,7 +3,7 @@ import FlightEnquiry from "@/models/FlightEnquiry";
 
 export default async function AdminPage() {
   const client = await clientPromise;
-  await client.db(); // ensures connection
+  const db = client.db();
 
   const bookings = await FlightEnquiry.find().lean();
 
@@ -24,6 +24,7 @@ export default async function AdminPage() {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Email</th>
             <th>From</th>
             <th>To</th>
           </tr>
@@ -32,6 +33,7 @@ export default async function AdminPage() {
           {bookings.map((b: any) => (
             <tr key={b._id}>
               <td>{b.name}</td>
+              <td>{b.email}</td>
               <td>{b.from}</td>
               <td>{b.to}</td>
             </tr>
