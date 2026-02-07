@@ -1,14 +1,17 @@
-import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+export default function HomePage() {
+  return (
+    <main style={{ padding: 20 }}>
+      <h1>Flight Booking Website</h1>
 
-export async function GET() {
-  try {
-    const client = await clientPromise;
-    const db = client.db("test");
-    const bookings = await db.collection("bookings").find({}).toArray();
+      <p>Welcome! Your site is live.</p>
 
-    return NextResponse.json(bookings);
-  } catch (error) {
-    return NextResponse.json({ error: "DB error" }, { status: 500 });
-  }
+      <ul>
+        <li>Flight Booking</li>
+        <li>Hotel Booking</li>
+        <li>Cab Booking</li>
+      </ul>
+
+      <a href="/admin/login">Go to Admin Login</a>
+    </main>
+  );
 }
