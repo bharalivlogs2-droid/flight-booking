@@ -1,19 +1,19 @@
-import clientPromise from "@/lib/mongodb";
+"use client";
 
-export const dynamic = "force-dynamic";
+import { useEffect, useState } from "react";
 
-export default async function AdminPage() {
-  const client = await clientPromise;
-  const db = client.db("flight");
+export default function AdminPage() {
+  const [bookings, setBookings] = useState<any[]>([]);
 
-  const bookings = await db
-    .collection("flightenquiries")
-    .find()
-    .toArray();
+  useEffect(() => {
+    fetch("/api/admin/bookings")
+      .then((res) => res.json())
+      .then((data) => setBookings(data));
+  }, []);
 
   return (
     <div style={{ padding: 20 }}>
-      <h2>Admin Bookings</h2>
+      <h2>Flight Enquiries</h2>
 
       <button
         onClick={() => {
@@ -24,7 +24,13 @@ export default async function AdminPage() {
         Logout
       </button>
 
-      <pre>{JSON.stringify(bookings, null, 2)}</pre>
+      <ul>
+        {bookings.map((b) => (
+          <li key={b._id}>
+            {b.name} — {b.from} → {b.to}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
