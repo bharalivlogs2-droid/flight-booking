@@ -1,21 +1,19 @@
-import { MongoClient } from "mongodb";
+import clientPromise from "@/lib/mongodb";
 import { NextResponse } from "next/server";
-
-const uri = process.env.MONGODB_URI as string;
 
 export async function GET() {
   try {
-    const client = new MongoClient(uri);
-    await client.connect();
-
+    const client = await clientPromise;
     const db = client.db("flightbooking");
-    const bookings = await db.collection("bookings").find({}).toArray();
 
-    await client.close();
+    const bookings = await db
+      .collection("bookings")
+      .find({})
+      .toArray();
 
     return NextResponse.json(bookings);
   } catch (error) {
-    console.error(error);
+    console.error("API ERROR:", error);
     return NextResponse.json(
       { error: "Failed to fetch bookings" },
       { status: 500 }
